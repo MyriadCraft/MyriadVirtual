@@ -1,0 +1,23 @@
+name: MyriadVirtual
+main: me.meiamsome.myriadvirtual.MyriadVirtual
+version: 1.9.0
+author: meiamsome
+description: >
+             Plugin that allows you to have virtual private chests.
+
+commands:
+    chest:
+        description: Opens a virtual player-specific chest.
+        usage: |
+              /<command> - Opens your private chest.
+              /<command> [player] - Opens someone else's chest.
+    clearchest:
+        description: Clears the contents of a chest.
+        usage: |
+              /<command> - Clears your private chest.
+              /<command> [player] - Clears someone else's chest.
+    savechests:
+        description: Saves the chests to disk.
+    workbench:
+        aliases: [craft, craftbox, craftingbox]
+        description: Opens a virtual workbench.
