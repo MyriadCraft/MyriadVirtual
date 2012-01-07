@@ -22,7 +22,7 @@ public class WorkbenchCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (sender instanceof Player) {
 			final Player player = (Player) sender;
-			if (sender.hasPermission("ac.workbench")) {
+			if (sender.hasPermission("mv.workbench")) {
 				final EntityPlayer eh = ((CraftPlayer) sender).getHandle();
 				
 				final int windowId = 1; // should be safe to use a static window ID

@@ -53,7 +53,7 @@ public class ChestCommands implements CommandExecutor {
 				return true;
 	
 			} else if (args.length == 0) {
-				if (sender.hasPermission("ac.chest")) {
+				if (sender.hasPermission("mv.chest")) {
 					eh = ((CraftPlayer) sender).getHandle();
 					eh.a(chestManager.getChest(player.getName()));
 				} else {

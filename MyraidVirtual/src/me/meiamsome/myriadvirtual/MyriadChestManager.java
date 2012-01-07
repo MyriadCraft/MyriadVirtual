@@ -10,12 +10,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-
-import net.minecraft.server.InventoryLargeChest;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.ItemStack;
-import net.minecraft.server.TileEntityChest;
+
+import org.bukkit.Bukkit;
 
 public class MyriadChestManager {
 	private static Logger log = Logger.getLogger("Minecraft");
