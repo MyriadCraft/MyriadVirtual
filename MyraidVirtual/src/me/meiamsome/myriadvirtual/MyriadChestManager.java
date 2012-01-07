@@ -20,16 +20,16 @@ import net.minecraft.server.TileEntityChest;
 public class MyriadChestManager {
 	private static Logger log = Logger.getLogger("Minecraft");
 
-	private final HashMap<String, InventoryLargeChest> chests;
+	private final HashMap<String, IInventory> chests;
 	private final File dataFolder;
 
 	public MyriadChestManager(File dataFolder) {
 		this.dataFolder = dataFolder;
-		this.chests = new HashMap<String, InventoryLargeChest>();
+		this.chests = new HashMap<String, IInventory>();
 	}
 
-	public InventoryLargeChest getChest(String playerName) {
-		InventoryLargeChest chest = chests.get(playerName.toLowerCase());
+	public IInventory getChest(String playerName) {
+		IInventory chest = chests.get(playerName.toLowerCase());
 
 		if (chest == null)
 			chest = addChest(playerName);
@@ -37,8 +37,8 @@ public class MyriadChestManager {
 		return chest;
 	}
 
-	private InventoryLargeChest addChest(String playerName) {
-		InventoryLargeChest chest = new MyriadChest("Virtual Chest", new TileEntityChest(), new TileEntityChest(), Bukkit.getPlayer(playerName));
+	private IInventory addChest(String playerName) {
+		IInventory chest = new MyriadChest(playerName+"'s Chest", Bukkit.getPlayer(playerName));
 		chests.put(playerName.toLowerCase(), chest);
 		return chest;
 	}
@@ -60,8 +60,8 @@ public class MyriadChestManager {
 		};
 		for (File chestFile : dataFolder.listFiles(filter)) {
 			try {
-				final InventoryLargeChest chest = new InventoryLargeChest("Virtual Chest", new TileEntityChest(), new TileEntityChest());
 				final String playerName = chestFile.getName().substring(0, chestFile.getName().length() - 6);
+				final MyriadChest chest = new MyriadChest(playerName+"'s Chest", Bukkit.getPlayer(playerName));
 
 				final BufferedReader in = new BufferedReader(new FileReader(chestFile));
 
@@ -102,7 +102,7 @@ public class MyriadChestManager {
 		dataFolder.mkdirs();
 
 		for (String playerName : chests.keySet()) {
-			final InventoryLargeChest chest = chests.get(playerName);
+			final IInventory chest = chests.get(playerName);
 
 			try {
 				final File chestFile = new File(dataFolder, playerName + ".chest");
