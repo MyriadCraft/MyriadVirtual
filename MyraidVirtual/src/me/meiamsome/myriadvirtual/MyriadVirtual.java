@@ -38,7 +38,6 @@ public class MyriadVirtual extends JavaPlugin {
 		final ChestCommands chestCommands = new ChestCommands(this, chestManager);
 		getCommand("chest").setExecutor(chestCommands);
 		getCommand("clearchest").setExecutor(chestCommands);
-		getCommand("fixchest").setExecutor(chestCommands);
 		getCommand("changechest").setExecutor(chestCommands);
 		getCommand("savechests").setExecutor(chestCommands);
 		getCommand("workbench").setExecutor(new WorkbenchCommand(this));

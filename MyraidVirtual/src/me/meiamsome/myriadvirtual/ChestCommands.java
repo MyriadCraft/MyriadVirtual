@@ -29,8 +29,6 @@ public class ChestCommands implements CommandExecutor {
 			return performClearChestCommand(sender, args);
 		else if (name.equalsIgnoreCase("savechests"))
 			return performSaveChestsCommand(sender, args);
-		else if (name.equalsIgnoreCase("fixchest"))
-			return performFixChestsCommand(sender, args);
 		else if (name.equalsIgnoreCase("changechest"))
 			return performChangeChestsCommand(sender, args);
 		else
@@ -45,7 +43,9 @@ public class ChestCommands implements CommandExecutor {
 			if (args.length == 1) {
 				if (sender.hasPermission("mv.admin")) {
 					eh = ((CraftPlayer) sender).getHandle();
-					eh.a(chestManager.getChest(args[0]));
+					MyriadChest chest = (MyriadChest) chestManager.getChest(args[0]);
+					chest.fix(player);
+					eh.a(chest);
 					//eh.a(new TileEntityChest());
 				} else {
 					sender.sendMessage(ChatColor.RED+"You\'re not allowed to use this command.");
@@ -55,7 +55,9 @@ public class ChestCommands implements CommandExecutor {
 			} else if (args.length == 0) {
 				if (sender.hasPermission("mv.chest")) {
 					eh = ((CraftPlayer) sender).getHandle();
-					eh.a(chestManager.getChest(player.getName()));
+					MyriadChest chest = (MyriadChest) chestManager.getChest(player.getName());
+					chest.fix(player);
+					eh.a(chest);
 				} else {
 					sender.sendMessage(ChatColor.RED+"You\'re not allowed to use this command.");
 				}
@@ -102,51 +104,6 @@ public class ChestCommands implements CommandExecutor {
 		return true;
 	}
 
-	private boolean performFixChestsCommand(CommandSender sender, String[] args) {
-		if (args.length >= 1) {
-			if ((sender instanceof Player) && !sender.hasPermission("mv.admin")) {
-				sender.sendMessage(ChatColor.RED+"You\'re not allowed to fix chests.");
-				return true;
-			}
-			MyriadChest chest=(MyriadChest) chestManager.getChest(args[0]);
-			if(chest.getSize()==27) {
-				for(int i=27;i<54;i++) {
-					if(chest.getItem(i)!=null) {
-						ItemStack is = chest.getItem(i);
-						boolean done=false;
-						for(int a=0;a<27&&!done;a++) {
-							if(chest.getItem(a).doMaterialsMatch(is)) {
-								int stack1=is.count, stack2=chest.getItem(a).count;
-								if(stack1+stack2<is.getMaxStackSize()) {
-									chest.getItem(a).count=stack1+stack2;
-									done=true;
-								} else {
-									is.count=stack1+stack2-is.getMaxStackSize();
-									chest.getItem(a).count=is.getMaxStackSize();
-								}
-							}
-						}
-						for(int a=0;a<27&&!done;a++) {
-							if(chest.getItem(a)==null) {
-								chest.setItem(a, is);
-								done=true;
-							}
-						}
-						if(!done) {
-							sender.sendMessage(ChatColor.RED+"Failed to fix "+ args[0] + "\'s chest! Please make more space.");
-							return true;
-						}
-						chest.setItem(i, null);
-					}
-				}
-				sender.sendMessage(ChatColor.GREEN+"Successfully fixed " + args[0] + "\'s chest.");
-			} else sender.sendMessage(ChatColor.GREEN+ args[0] + "\'s chest doesn't need fixing.");
-			return true;
-		} else {
-			 sender.sendMessage(ChatColor.RED+"Specify whose chest to fix");
-		}
-		return false;
-	}
 	private boolean performChangeChestsCommand(CommandSender sender, String[] args) {
 		if ((sender instanceof Player) && !sender.hasPermission("mv.admin")) {
 			sender.sendMessage(ChatColor.RED+"You\'re not allowed to alter chests.");
