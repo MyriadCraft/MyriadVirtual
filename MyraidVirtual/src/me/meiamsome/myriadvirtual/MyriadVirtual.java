@@ -47,7 +47,7 @@ public class MyriadVirtual extends JavaPlugin {
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
 				chestManager.save();
-				log.fine("[AlphaChest] auto-saved chests");
+				log.fine("[MyriadVirtual] auto-saved chests");
 			}
 		}, autosaveInterval, autosaveInterval);
 

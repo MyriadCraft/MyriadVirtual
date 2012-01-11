@@ -5,19 +5,20 @@ import net.minecraft.server.IInventory;
 import net.minecraft.server.ItemStack;
 import net.minecraft.server.TileEntityChest;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class MyriadChest extends TileEntityChest implements IInventory{
-	Player owner, lastOpen;
+	String lastOpen;
+	String owner;
 	String name;
 	ItemStack[] stack;
-	boolean type;
-	public MyriadChest(String s, Player play) {
+	Boolean type = null;
+	public MyriadChest(String s, String play) {
 		owner=play;
 		name=s;
 		stack=new ItemStack[54];
-		type=play.hasPermission("mv.largeChest");
 		if(name.length()>15) {
 			if(name.lastIndexOf(' ')>15) {
 				name="Virtual Chest";
@@ -25,6 +26,8 @@ public class MyriadChest extends TileEntityChest implements IInventory{
 				name=name.substring(0,name.lastIndexOf(' '));
 			}
 		}
+		if(Bukkit.getPlayer(play) != null)
+		   type=Bukkit.getPlayer(play).hasPermission("mv.largeChest");
 	}
 	public ItemStack[] getContents() {
 		return stack;
@@ -35,6 +38,9 @@ public class MyriadChest extends TileEntityChest implements IInventory{
 	}
 	@Override
 	public int getSize() {
+		if(type==null) if(Bukkit.getPlayer(owner) != null) {
+				type=Bukkit.getPlayer(owner).hasPermission("mv.largeChest");
+		} else return 54;//Return 54 if the owner is not online or hasn't been since chest existed
 		return type?54:27;
 	}
 	@Override
@@ -61,6 +67,7 @@ public class MyriadChest extends TileEntityChest implements IInventory{
 	}
 	@Override
 	public ItemStack splitStack(int i, int j) {
+		//No idea how to implement?: HAX
 		super.setItem(0, getItem(i));
 		ItemStack ret=super.splitStack(0, j);
 		setItem(i,super.getItem(0));
@@ -74,7 +81,7 @@ public class MyriadChest extends TileEntityChest implements IInventory{
 	}
 	@Override
 	public void update() {
-		fix(null);
+		fix(null);// Calls super.update()
 	}
 	
 	public void fix(Player opener) {
@@ -110,12 +117,12 @@ public class MyriadChest extends TileEntityChest implements IInventory{
 		} 
 		if(!gDone) {
 			if(opener!=null) {
-				lastOpen=opener;
+				lastOpen=opener.getName();
 				opener.sendMessage(ChatColor.RED+"There are more items than fit the chest. Free some space!");
 			}
 		} else {
 			if(opener==null && lastOpen!=null){
-				lastOpen.sendMessage(ChatColor.GREEN+"Space issue resolved.");
+				Bukkit.getPlayer(lastOpen).sendMessage(ChatColor.GREEN+"Space issue resolved.");
 			}
 			lastOpen=null;
 		}

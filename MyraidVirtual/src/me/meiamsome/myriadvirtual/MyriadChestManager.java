@@ -36,7 +36,7 @@ public class MyriadChestManager {
 	}
 
 	private IInventory addChest(String playerName) {
-		IInventory chest = new MyriadChest(playerName+"'s Chest", Bukkit.getPlayer(playerName));
+		IInventory chest = new MyriadChest(playerName+"'s Chest", playerName);
 		chests.put(playerName.toLowerCase(), chest);
 		return chest;
 	}
@@ -59,7 +59,7 @@ public class MyriadChestManager {
 		for (File chestFile : dataFolder.listFiles(filter)) {
 			try {
 				final String playerName = chestFile.getName().substring(0, chestFile.getName().length() - 6);
-				final MyriadChest chest = new MyriadChest(playerName+"'s Chest", Bukkit.getPlayer(playerName));
+				final MyriadChest chest = new MyriadChest(playerName+"'s Chest", playerName);
 
 				final BufferedReader in = new BufferedReader(new FileReader(chestFile));
 
@@ -125,6 +125,6 @@ public class MyriadChestManager {
 			}
 		}
 
-		log.info("[Alpha Chest] saved " + savedChests + " chests");
+		log.info("[MyriadVirtual] saved " + savedChests + " chests");
 	}
 }
