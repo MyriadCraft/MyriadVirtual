@@ -1,7 +1,6 @@
 package me.meiamsome.myriadvirtual;
 
 import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.ItemStack;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,7 +44,7 @@ public class ChestCommands implements CommandExecutor {
 					eh = ((CraftPlayer) sender).getHandle();
 					MyriadChest chest = (MyriadChest) chestManager.getChest(args[0]);
 					chest.fix(player);
-					eh.a(chest);
+					eh.openContainer(chest);
 					//eh.a(new TileEntityChest());
 				} else {
 					sender.sendMessage(ChatColor.RED+"You\'re not allowed to use this command.");
@@ -57,7 +56,7 @@ public class ChestCommands implements CommandExecutor {
 					eh = ((CraftPlayer) sender).getHandle();
 					MyriadChest chest = (MyriadChest) chestManager.getChest(player.getName());
 					chest.fix(player);
-					eh.a(chest);
+					eh.openContainer(chest);
 				} else {
 					sender.sendMessage(ChatColor.RED+"You\'re not allowed to use this command.");
 				}

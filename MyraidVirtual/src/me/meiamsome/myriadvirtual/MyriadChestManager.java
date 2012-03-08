@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import net.minecraft.server.Enchantment;
 import net.minecraft.server.IInventory;
 import net.minecraft.server.ItemStack;
-
-import org.bukkit.Bukkit;
+import net.minecraft.server.NBTTagCompound;
 
 public class MyriadChestManager {
 	private static Logger log = Logger.getLogger("Minecraft");
@@ -65,6 +65,7 @@ public class MyriadChestManager {
 
 				String line;
 				int field = 0;
+				ItemStack is;
 				while ((line = in.readLine()) != null) {
 					if (line != "") {
 						final String[] parts = line.split(":");
@@ -73,7 +74,12 @@ public class MyriadChestManager {
 							int amount = Integer.parseInt(parts[1]);
 							short damage = Short.parseShort(parts[2]);
 							if (type != 0) {
-								chest.setItem(field, new ItemStack(type, amount, damage));
+								is= new ItemStack(type, amount, damage);
+								for(int i=3;i<parts.length;i++) {
+									String[] parts2 = parts[i].split(",");
+									is.addEnchantment(Enchantment.byId[Short.parseShort(parts2[0])], (int)Short.parseShort(parts2[1]));
+								}
+								chest.setItem(field,is);
 							}
 						} catch (NumberFormatException e) {
 							// ignore
@@ -111,9 +117,15 @@ public class MyriadChestManager {
 				final BufferedWriter out = new BufferedWriter(new FileWriter(chestFile));
 
 				for (ItemStack stack : chest.getContents()) {
-					if (stack != null)
-						out.write(stack.id + ":" + stack.count + ":" + stack.getData() + "\r\n");
-					else
+					if (stack != null) {
+						String a=stack.id + ":" + stack.count + ":" + stack.getData();
+						for(int i=0;i<stack.getEnchantments().size();i++) {
+							NBTTagCompound n=(NBTTagCompound)stack.getEnchantments().get(i);
+							a+=":"+n.getShort("id")+","+n.getShort("lvl");
+							
+						}
+						out.write(a+"\r\n");
+					} else
 						out.write("0:0:0\r\n");
 				}
 

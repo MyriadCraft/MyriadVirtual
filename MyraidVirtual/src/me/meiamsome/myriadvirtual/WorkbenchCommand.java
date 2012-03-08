@@ -1,7 +1,6 @@
 package me.meiamsome.myriadvirtual;
 
 import net.minecraft.server.EntityPlayer;
-import net.minecraft.server.IInventory;
 import net.minecraft.server.Packet100OpenWindow;
 
 import org.bukkit.ChatColor;
